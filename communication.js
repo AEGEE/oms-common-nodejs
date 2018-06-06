@@ -8,7 +8,7 @@ exports.resetCache = () => {
 
 exports.getServiceByName = async (config, name) => {
   // If we already fetched that name, just return it as it is not going to change quickly
-  if (namecache[name]) {
+  if (process.env.NODE_ENV !== 'test' && namecache[name]) {
     return namecache[name];
   }
 
