@@ -1,8 +1,12 @@
 const request = require('request-promise-native');
 
-const namecache = {};
+let namecache = {};
 
-module.exports.getServiceByName = async (config, name) => {
+exports.resetCache = () => {
+  nameCache = {};
+};
+
+exports.getServiceByName = async (config, name) => {
   // If we already fetched that name, just return it as it is not going to change quickly
   if (namecache[name]) {
     return namecache[name];
@@ -32,7 +36,7 @@ module.exports.getServiceByName = async (config, name) => {
   }
 };
 
-module.exports.getRequestHeaders = async (req) => {
+exports.getRequestHeaders = async (req) => {
   // If we have the X-Auth-Token header, just use it.
   if (req && req.headers && req.headers['x-auth-token']) {
     return {
