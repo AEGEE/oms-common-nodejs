@@ -26,9 +26,17 @@ exports.makeError = (res, statusCode, err, message) => {
 
     // If the error is SequelizeValidationError, pass the errors details to the user.
     if (err.name && err.name === 'SequelizeValidationError') {
+        // Reformat errors.
         return res.status(statusCode).json({
             success: false,
-            errors: err.errors
+            errors: err.errors.reduce((acc, val) => {
+                if (val.path in acc) {
+                    acc[val.path].push(val.message);
+                } else {
+                    acc[val.path] = [val.message]
+                }
+                return acc;
+            }, {})
         });
     }
 
