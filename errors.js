@@ -1,8 +1,9 @@
 exports.makeError = (res, statusCode, err, message) => {
-    // 3 cases:
+    // 4 cases:
     // 1) 'err' is a string
     // 2) 'err' is a ValidationError
-    // 3) 'err' is Error
+    // 3) 'err' is a SequelizeValidationError
+    // 4) 'err' is Error
 
     // If the error is a string, just forward it to user.
     if (typeof err === 'string') {
@@ -15,10 +16,18 @@ exports.makeError = (res, statusCode, err, message) => {
     const msgText = message ? message + ' ' + err.message : err.message;
 
     // If the error is ValidationError, pass the errors details to the user.
-    if (err.name && ['ValidationError', 'SequelizeValidationError'].includes(err.name)) {
+    if (err.name && err.name === 'ValidationError') {
         return res.status(statusCode).json({
             success: false,
             message: msgText,
+            errors: err.errors
+        });
+    }
+
+    // If the error is SequelizeValidationError, pass the errors details to the user.
+    if (err.name && err.name === 'SequelizeValidationError') {
+        return res.status(statusCode).json({
+            success: false,
             errors: err.errors
         });
     }
