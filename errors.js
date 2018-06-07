@@ -15,7 +15,7 @@ exports.makeError = (res, statusCode, err, message) => {
     const msgText = message ? message + ' ' + err.message : err.message;
 
     // If the error is ValidationError, pass the errors details to the user.
-    if (err.name && err.name === 'ValidationError') {
+    if (err.name && ['ValidationError', 'SequelizeValidationError'.includes(err.name)) {
         return res.status(statusCode).json({
             success: false,
             message: msgText,
