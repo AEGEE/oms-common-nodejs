@@ -47,6 +47,7 @@ exports.makeError = (res, statusCode, err, message) => {
     });
 };
 
+exports.makeUnauthorizedError = (res, err, message) => exports.makeError(res, 401, err, message);
 exports.makeValidationError = (res, err, message) => exports.makeError(res, 422, err, message);
 exports.makeForbiddenError = (res, err, message) => exports.makeError(res, 403, err, message);
 exports.makeNotFoundError = (res, err, message) => exports.makeError(res, 404, err, message);
